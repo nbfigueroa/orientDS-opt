@@ -1,0 +1,1380 @@
+Model {
+  Name			  "clv3d"
+  Version		  3.00
+  SimParamPage		  "Solver"
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  off
+  ShowLineWidths	  off
+  ShowPortDataTypes	  off
+  StartTime		  "0.0"
+  StopTime		  "40"
+  SolverMode		  "SingleTasking"
+  Solver		  "ode45"
+  RelTol		  "1e-3"
+  AbsTol		  "1e-6"
+  Refine		  "1"
+  MaxStep		  "auto"
+  InitialStep		  "auto"
+  FixedStep		  "auto"
+  MaxOrder		  5
+  OutputOption		  "RefineOutputTimes"
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[]"
+  SaveTime		  off
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  off
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "[]"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  SaveFormat		  "Matrix"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  "warning"
+  MinStepSizeMsg	  "warning"
+  UnconnectedInputMsg	  "warning"
+  UnconnectedOutputMsg	  "warning"
+  UnconnectedLineMsg	  "warning"
+  InheritedTsInSrcMsg	  "warning"
+  IntegerOverflowMsg	  "none"
+  UnnecessaryDatatypeConvMsg "none"
+  Int32ToFloatConvMsg	  "warning"
+  SignalLabelMismatchMsg  "none"
+  ConsistencyChecking	  "off"
+  ZeroCross		  on
+  SimulationMode	  "normal"
+  BlockDataTips		  on
+  BlockParametersDataTip  on
+  BlockAttributesDataTip  off
+  BlockPortWidthsDataTip  off
+  BlockDescriptionStringDataTip	off
+  BlockMaskParametersDataTip off
+  ToolBar		  on
+  StatusBar		  on
+  BrowserShowLibraryLinks off
+  BrowserLookUnderMasks	  off
+  OptimizeBlockIOStorage  on
+  BufferReuse		  on
+  BooleanDataType	  off
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWOptions		  "-aEnforceIntegerDowncast=1 -aFoldNonRolledExpr=1 -a"
+"InlineInvariantSignals=1 -aInlineParameters=0 -aLocalBlockOutputs=1 -aRollThr"
+"eshold=5 -aZeroInternalMemoryAtStartup=1 -aZeroExternalMemoryAtStartup=1 -aIn"
+"itFltsAndDblsToZero=1 -aGenerateReport=0 -aGenCodeOnly=0 -aRTWVerbose=1 -aInc"
+"ludeHyperlinkInReport=0 -aLaunchReport=0 -aForceParamTrailComments=0 -aGenera"
+"teComments=1 -aIgnoreCustomStorageClasses=1 -aIncHierarchyInIds=0 -aMaxRTWIdL"
+"en=31 -aShowEliminatedStatements=0 -aPrefixModelToSubsysFcnNames=1 -aIncDataT"
+"ypeInIds=0 -aInsertBlockDesc=0 -aSimulinkBlockComments=1 -aInlinedPrmAccess="
+"\"Literals\"  -aSuppressErrorStatus=0 -aModelReferenceCompliant=1 -aSupportNo"
+"nInlinedSFcns=1 -aSupportContinuousTime=1 -aSupportComplex=1 -aSupportNonFini"
+"te=1 -aSupportAbsoluteTime=1 -aTargetFcnLib=\"ansi_tfl_tmw.mat\" -aMultiInsta"
+"nceERTCode=0 -aLogVarNameModifier=\"rt_\" -aIsPILTarget=0 -aCombineOutputUpda"
+"teFcns=0 -aGenerateASAP2=0 -aGenerateSampleERTMain=0 -aGenerateFullHeader=1 -"
+"aUtilityFuncGeneration=\"Auto\" -aIncludeFileDelimiter=\"Auto\" -aIncludeMdlT"
+"erminateFcn=1 -aPurelyIntegerCode=0 -aERTCustomFileBanners=0 -aRTWCAPIStates="
+"0 -aRTWCAPIParams=0 -aRTWCAPISignals=0 -aMatFileLogging=1 -aGenFloatMathFcnCa"
+"lls=\"ANSI_C\" -aExtModeMexFile=\"ext_comm\" -aExtModeTransport=0 -aExtModeSt"
+"aticAllocSize=1000000 -aExtModeTesting=0 -aExtModeStaticAlloc=0 -aExtMode=0  "
+"-aInitFltsAndDblsToZero=1 -aInitFltsAndDblsToZero=1 -aInitFltsAndDblsToZero=1"
+" "
+  RTWInlineParameters	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  ExtModeTrigType	  "manual"
+  ExtModeTrigMode	  "oneshot"
+  ExtModeTrigPort	  "1"
+  ExtModeTrigElement	  "any"
+  ExtModeTrigDuration	  1000
+  ExtModeTrigHoldOff	  0
+  ExtModeTrigDelay	  0
+  ExtModeTrigDirection	  "rising"
+  ExtModeTrigLevel	  0
+  ExtModeArchiveMode	  "off"
+  ExtModeAutoIncOneShot	  off
+  ExtModeIncDirWhenArm	  off
+  ExtModeAddSuffixToVar	  off
+  ExtModeWriteAllDataToWs off
+  ExtModeArmWhenConnect	  off
+  Created		  "Wed Jul 22 05:30:07 1998"
+  Creator		  "The MathWorks Inc."
+  UpdateHistory		  "UpdateHistoryNever"
+  ModifiedByFormat	  "%<Auto>"
+  LastModifiedBy	  "campa"
+  ModifiedDateFormat	  "%<Auto>"
+  LastModifiedDate	  "Wed Mar 14 21:39:56 2007"
+  ModelVersionFormat	  "1.%<AutoIncrement:78>"
+  ConfigurationManager	  "none"
+  BlockDefaults {
+    Orientation		    "right"
+    ForegroundColor	    "black"
+    BackgroundColor	    "white"
+    DropShadow		    off
+    NamePlacement	    "normal"
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    "normal"
+    FontAngle		    "normal"
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    "center"
+    VerticalAlignment	    "middle"
+    ForegroundColor	    "black"
+    BackgroundColor	    "white"
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    "normal"
+    FontAngle		    "normal"
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    "normal"
+    FontAngle		    "normal"
+  }
+  System {
+    Name		    "clv3d"
+    Location		    [94, 74, 544, 438]
+    Open		    on
+    ModelBrowserVisibility  off
+    ModelBrowserWidth	    200
+    ScreenColor		    "white"
+    PaperOrientation	    "landscape"
+    PaperPositionMode	    "auto"
+    PaperType		    "usletter"
+    PaperUnits		    "inches"
+    ZoomFactor		    "100"
+    AutoZoom		    on
+    ReportName		    "simulink-default.rpt"
+    Block {
+      BlockType		      Mux
+      Name		      "Mux"
+      Ports		      [3, 1, 0, 0, 0]
+      Position		      [190, 24, 195, 296]
+      ShowName		      off
+      Inputs		      "[4 4 4]"
+      DisplayOption	      "bar"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "Scope"
+      Ports		      [1, 0, 0, 0, 0]
+      Position		      [355, 249, 385, 281]
+      Floating		      off
+      Location		      [508, 470, 832, 709]
+      Open		      on
+      NumInputPorts	      "1"
+      TickLabels	      "OneTimeTick"
+      ZoomMode		      "on"
+      List {
+	ListType		AxesTitles
+	axes1			"%<SignalLabel>"
+      }
+      Grid		      "on"
+      TimeRange		      "40"
+      YMin		      "0"
+      YMax		      "0.8"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      DataFormat	      "StructureWithTime"
+      LimitMaxRows	      on
+      MaxRows		      "5000"
+      Decimation	      "1"
+      SampleInput	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Selector
+      Name		      "Selector"
+      Position		      [250, 115, 290, 135]
+      Elements		      "[1 5 9]"
+      InputPortWidth	      "12"
+      Port {
+	PortNumber		1
+	Name			"p1p2p3"
+	TestPoint		off
+	RTWStorageClass		"Auto"
+      }
+    }
+    Block {
+      BlockType		      Selector
+      Name		      "Selector1"
+      Position		      [250, 150, 290, 170]
+      Elements		      "[2 6 10]"
+      InputPortWidth	      "12"
+      Port {
+	PortNumber		1
+	Name			"p1p2p3"
+	TestPoint		off
+	RTWStorageClass		"Auto"
+      }
+    }
+    Block {
+      BlockType		      Selector
+      Name		      "Selector2"
+      Position		      [250, 185, 290, 205]
+      Elements		      "[3 7 11]"
+      InputPortWidth	      "12"
+      Port {
+	PortNumber		1
+	Name			"p1p2p3"
+	TestPoint		off
+	RTWStorageClass		"Auto"
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "XYZ Graph"
+      Ports		      [3, 0, 0, 0, 0]
+      Position		      [345, 106, 385, 214]
+      CopyFcn		      "sfunxyz([],[],[],'CopyBlock')"
+      DeleteFcn		      "sfunxyz([],[],[],'DeleteBlock')"
+      LoadFcn		      "sfunxyz([],[],[],'LoadBlock')"
+      StartFcn		      "sfunxyz([],[],[],'Start')"
+      StopFcn		      "sfunxyz([],[],[],'Stop')"
+      NameChangeFcn	      "sfunxyz([],[],[],'NameChange')"
+      ShowPortLabels	      on
+      MaskType		      "XYZ multiscope"
+      MaskDescription	      "   Multidimensional XYZ scope using MATLAB grap"
+"h window.  \n   X,Y,Z coordinates are respectively the first,second, and thir"
+"d input.\n   Enter the number of lines, the XYZ ranges, the camera position, "
+"\n   and the sampling time, as mask parameters."
+      MaskHelp		      "   This block can be used to explore limit cycl"
+"es. \n   Look at the m-file sfunxyz.m to see how it works."
+      MaskPromptString	      "Number of lines|[xmin xmax]|[ymin ymax]|[zmin z"
+"max]|Camera position (use [0 0 1] for 2D XY view)|Grid|Sample time:"
+      MaskStyleString	      "edit,edit,edit,edit,edit,checkbox,edit"
+      MaskTunableValueString  "on,on,on,on,on,on,on"
+      MaskCallbackString      "||||||"
+      MaskEnableString	      "on,on,on,on,on,on,on"
+      MaskVisibilityString    "on,on,on,on,on,on,on"
+      MaskVariables	      "np=@1;xlim=@2;ylim=@3;zlim=@4;cp=@5;gd=@6;st=@7"
+";"
+      MaskDisplay	      "plot([.05 .95 .95 .05 .05],[.45 .45 .95 .95 .45"
+"], 0.5+cos(0:0.1:2*pi)*0.3,0.7+sin(0:0.1:2*pi)*0.2)"
+      MaskSelfModifiable      on
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "normalized"
+      MaskValueString	      "3|[-1 1]|[-1 1]|[0 1]|[1 2 3]|on|0.01"
+      System {
+	Name			"XYZ Graph"
+	Location		[94, 121, 400, 327]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	ZoomFactor		"100"
+	AutoZoom		on
+	Block {
+	  BlockType		  Inport
+	  Name			  "x"
+	  Position		  [35, 37, 65, 53]
+	  Port			  "1"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	  DataType		  "auto"
+	  SignalType		  "auto"
+	  Interpolate		  on
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "y"
+	  Position		  [35, 72, 65, 88]
+	  Port			  "2"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	  DataType		  "auto"
+	  SignalType		  "auto"
+	  Interpolate		  on
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "z"
+	  Position		  [35, 107, 65, 123]
+	  Port			  "3"
+	  PortWidth		  "-1"
+	  SampleTime		  "-1"
+	  DataType		  "auto"
+	  SignalType		  "auto"
+	  Interpolate		  on
+	}
+	Block {
+	  BlockType		  Mux
+	  Name			  "Mux"
+	  Ports			  [3, 1, 0, 0, 0]
+	  Position		  [105, 33, 135, 137]
+	  ShowName		  off
+	  Inputs		  "[np np np]"
+	  DisplayOption		  "none"
+	}
+	Block {
+	  BlockType		  "S-Function"
+	  Name			  "sfunxy"
+	  Ports			  [1, 0, 0, 0, 0]
+	  Position		  [175, 70, 225, 90]
+	  ShowName		  off
+	  FunctionName		  "sfunxyz"
+	  Parameters		  "[xlim ylim zlim],st,np,cp,gd"
+	  PortCounts		  "[]"
+	  SFunctionModules	  "''"
+	}
+	Line {
+	  SrcBlock		  "z"
+	  SrcPort		  1
+	  DstBlock		  "Mux"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "y"
+	  SrcPort		  1
+	  DstBlock		  "Mux"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "x"
+	  SrcPort		  1
+	  Points		  [20, 0]
+	  DstBlock		  "Mux"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Mux"
+	  SrcPort		  1
+	  DstBlock		  "sfunxy"
+	  DstPort		  1
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "clv1"
+      Ports		      [0, 1, 0, 0, 0]
+      Position		      [70, 41, 110, 99]
+      ShowPortLabels	      on
+      MaskType		      "Competitive Lotka Volterra System"
+      MaskDescription	      " This autonomous system represents the competit"
+"ive lotka volterra system\n xdot =  Rx .* ( 1 - Ax)\n where each component of"
+" x represents a population, \n A is an interaction matrix, and R is a diagona"
+"l \"growth rate\" matrix.\n Parameters and initial state can be selected from"
+" the mask.\n"
+      MaskHelp		      " This autonomous system represents the competit"
+"ive lotka volterra system\n <p>\n The system equations are: \n xdot =  Rx .* "
+"( 1 - Ax)\n where each component of x represents a population, \n A is an int"
+"eraction matrix, and R is a diagonal \"growth rate\" matrix.\n Parameters and"
+" initial state can be selected from the mask.\n"
+      MaskPromptString	      "A|R|Initial Condition"
+      MaskStyleString	      "edit,edit,edit"
+      MaskTunableValueString  "on,on,on"
+      MaskCallbackString      "||"
+      MaskEnableString	      "on,on,on"
+      MaskVisibilityString    "on,on,on"
+      MaskVariables	      "A=@1;R=@2;x0=@3;"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "[1 1.09 1.52 0; 0 1 0.44 1.36; 2.33 0 1 1.47; 1"
+".21 0.51 0.35 1]|diag([1 0.72 1.53 1.27])|[0.2 0.2 0.2 0.1]"
+      System {
+	Name			"clv1"
+	Location		[444, 276, 995, 491]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	ZoomFactor		"100"
+	AutoZoom		on
+	Block {
+	  BlockType		  Constant
+	  Name			  "Constant"
+	  Position		  [15, 144, 105, 166]
+	  Value			  "ones(size(A,2),1)"
+	}
+	Block {
+	  BlockType		  Integrator
+	  Name			  "Integrator"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [410, 134, 440, 156]
+	  ExternalReset		  "none"
+	  InitialConditionSource  "internal"
+	  InitialCondition	  "x0"
+	  LimitOutput		  off
+	  UpperSaturationLimit	  "inf"
+	  LowerSaturationLimit	  "-inf"
+	  ShowSaturationPort	  off
+	  ShowStatePort		  off
+	  AbsoluteTolerance	  "auto"
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "Matrix Gain A"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [175, 70, 205, 100]
+	  Orientation		  "left"
+	  ShowPortLabels	  on
+	  MaskType		  "Matrix Gain"
+	  MaskDescription	  "Matrix Gain."
+	  MaskHelp		  "Multiplies input vector by entered matrix t"
+"o produce output vector (y=Au)."
+	  MaskPromptString	  "Gain matrix:"
+	  MaskStyleString	  "edit"
+	  MaskTunableValueString  "on"
+	  MaskEnableString	  "on"
+	  MaskVisibilityString	  "on"
+	  MaskVariables		  "K=@1;"
+	  MaskDisplay		  "disp('A')"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "A"
+	  System {
+	    Name		    "Matrix Gain A"
+	    Location		    [162, 233, 402, 326]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "usletter"
+	    PaperUnits		    "inches"
+	    ZoomFactor		    "100"
+	    AutoZoom		    on
+	    Block {
+	      BlockType		      Inport
+	      Name		      "In1"
+	      Position		      [25, 33, 55, 47]
+	      Port		      "1"
+	      PortWidth		      "-1"
+	      SampleTime	      "-1"
+	      DataType		      "auto"
+	      SignalType	      "auto"
+	      Interpolate	      on
+	    }
+	    Block {
+	      BlockType		      StateSpace
+	      Name		      "State\nSpace"
+	      Position		      [80, 23, 145, 57]
+	      ShowName		      off
+	      A			      "[]"
+	      B			      "[]"
+	      C			      "[]"
+	      D			      "K"
+	      X0		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "Out1"
+	      Position		      [170, 33, 200, 47]
+	      Port		      "1"
+	      OutputWhenDisabled      "held"
+	      InitialOutput	      "[]"
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      DstBlock		      "State\nSpace"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "State\nSpace"
+	      SrcPort		      1
+	      DstBlock		      "Out1"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "Matrix Gain R"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [340, 130, 370, 160]
+	  ShowPortLabels	  on
+	  MaskType		  "Matrix Gain"
+	  MaskDescription	  "Matrix Gain."
+	  MaskHelp		  "Multiplies input vector by entered matrix t"
+"o produce output vector (y=Au)."
+	  MaskPromptString	  "Gain matrix:"
+	  MaskStyleString	  "edit"
+	  MaskTunableValueString  "on"
+	  MaskEnableString	  "on"
+	  MaskVisibilityString	  "on"
+	  MaskVariables		  "K=@1;"
+	  MaskDisplay		  "disp('R')"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "R"
+	  System {
+	    Name		    "Matrix Gain R"
+	    Location		    [162, 233, 402, 326]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "usletter"
+	    PaperUnits		    "inches"
+	    ZoomFactor		    "100"
+	    AutoZoom		    on
+	    Block {
+	      BlockType		      Inport
+	      Name		      "In1"
+	      Position		      [25, 33, 55, 47]
+	      Port		      "1"
+	      PortWidth		      "-1"
+	      SampleTime	      "-1"
+	      DataType		      "auto"
+	      SignalType	      "auto"
+	      Interpolate	      on
+	    }
+	    Block {
+	      BlockType		      StateSpace
+	      Name		      "State\nSpace"
+	      Position		      [80, 23, 145, 57]
+	      ShowName		      off
+	      A			      "[]"
+	      B			      "[]"
+	      C			      "[]"
+	      D			      "K"
+	      X0		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "Out1"
+	      Position		      [170, 33, 200, 47]
+	      Port		      "1"
+	      OutputWhenDisabled      "held"
+	      InitialOutput	      "[]"
+	    }
+	    Line {
+	      SrcBlock		      "State\nSpace"
+	      SrcPort		      1
+	      DstBlock		      "Out1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      DstBlock		      "State\nSpace"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  Product
+	  Name			  "Product"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [275, 119, 300, 166]
+	  ShowName		  off
+	  Inputs		  "2"
+	  SaturateOnIntegerOverflow on
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [130, 145, 150, 165]
+	  ShowName		  off
+	  IconShape		  "round"
+	  Inputs		  "-+|"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "x"
+	  Position		  [490, 138, 520, 152]
+	  Port			  "1"
+	  OutputWhenDisabled	  "held"
+	  InitialOutput		  "[]"
+	}
+	Line {
+	  SrcBlock		  "Constant"
+	  SrcPort		  1
+	  DstBlock		  "Sum"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Matrix Gain A"
+	  SrcPort		  1
+	  Points		  [-30, 0]
+	  DstBlock		  "Sum"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Sum"
+	  SrcPort		  1
+	  DstBlock		  "Product"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Integrator"
+	  SrcPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    DstBlock		    "x"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, -60; -215, 0]
+	    Branch {
+	      Points		      [0, 45]
+	      DstBlock		      "Product"
+	      DstPort		      1
+	    }
+	    Branch {
+	      DstBlock		      "Matrix Gain A"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Line {
+	  SrcBlock		  "Product"
+	  SrcPort		  1
+	  DstBlock		  "Matrix Gain R"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Matrix Gain R"
+	  SrcPort		  1
+	  DstBlock		  "Integrator"
+	  DstPort		  1
+	}
+	Annotation {
+	  Position		  [122, 32]
+	  Text			  "Competitive Lotka-Volterra Model System"
+	}
+	Annotation {
+	  Position		  [412, 32]
+	  Text			  "xdot =  Rx .* ( 1 - Ax) "
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "clv2"
+      Ports		      [0, 1, 0, 0, 0]
+      Position		      [70, 131, 110, 189]
+      ShowPortLabels	      on
+      MaskType		      "Competitive Lotka Volterra System"
+      MaskDescription	      " This autonomous system represents the competit"
+"ive lotka volterra system\n xdot =  Rx .* ( 1 - Ax)\n where each component of"
+" x represents a population, \n A is an interaction matrix, and R is a diagona"
+"l \"growth rate\" matrix.\n Parameters and initial state can be selected from"
+" the mask.\n"
+      MaskHelp		      " This autonomous system represents the competit"
+"ive lotka volterra system\n <p>\n The system equations are: \n xdot =  Rx .* "
+"( 1 - Ax)\n where each component of x represents a population, \n A is an int"
+"eraction matrix, and R is a diagonal \"growth rate\" matrix.\n Parameters and"
+" initial state can be selected from the mask.\n"
+      MaskPromptString	      "A|R|Initial Condition"
+      MaskStyleString	      "edit,edit,edit"
+      MaskTunableValueString  "on,on,on"
+      MaskCallbackString      "||"
+      MaskEnableString	      "on,on,on"
+      MaskVisibilityString    "on,on,on"
+      MaskVariables	      "A=@1;R=@2;x0=@3;"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "[1 1.09 1.52 0; 0 1 0.44 1.36; 2.33 0 1 1.47; 1"
+".21 0.51 0.35 1]|diag([1 0.72 1.53 1.27])|[0.2 0.2 0.2 0.2]"
+      System {
+	Name			"clv2"
+	Location		[444, 276, 995, 491]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	ZoomFactor		"100"
+	AutoZoom		on
+	Block {
+	  BlockType		  Constant
+	  Name			  "Constant"
+	  Position		  [15, 144, 105, 166]
+	  Value			  "ones(size(A,2),1)"
+	}
+	Block {
+	  BlockType		  Integrator
+	  Name			  "Integrator"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [410, 134, 440, 156]
+	  ExternalReset		  "none"
+	  InitialConditionSource  "internal"
+	  InitialCondition	  "x0"
+	  LimitOutput		  off
+	  UpperSaturationLimit	  "inf"
+	  LowerSaturationLimit	  "-inf"
+	  ShowSaturationPort	  off
+	  ShowStatePort		  off
+	  AbsoluteTolerance	  "auto"
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "Matrix Gain A"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [175, 70, 205, 100]
+	  Orientation		  "left"
+	  ShowPortLabels	  on
+	  MaskType		  "Matrix Gain"
+	  MaskDescription	  "Matrix Gain."
+	  MaskHelp		  "Multiplies input vector by entered matrix t"
+"o produce output vector (y=Au)."
+	  MaskPromptString	  "Gain matrix:"
+	  MaskStyleString	  "edit"
+	  MaskTunableValueString  "on"
+	  MaskEnableString	  "on"
+	  MaskVisibilityString	  "on"
+	  MaskVariables		  "K=@1;"
+	  MaskDisplay		  "disp('A')"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "A"
+	  System {
+	    Name		    "Matrix Gain A"
+	    Location		    [162, 233, 402, 326]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "usletter"
+	    PaperUnits		    "inches"
+	    ZoomFactor		    "100"
+	    AutoZoom		    on
+	    Block {
+	      BlockType		      Inport
+	      Name		      "In1"
+	      Position		      [25, 33, 55, 47]
+	      Port		      "1"
+	      PortWidth		      "-1"
+	      SampleTime	      "-1"
+	      DataType		      "auto"
+	      SignalType	      "auto"
+	      Interpolate	      on
+	    }
+	    Block {
+	      BlockType		      StateSpace
+	      Name		      "State\nSpace"
+	      Position		      [80, 23, 145, 57]
+	      ShowName		      off
+	      A			      "[]"
+	      B			      "[]"
+	      C			      "[]"
+	      D			      "K"
+	      X0		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "Out1"
+	      Position		      [170, 33, 200, 47]
+	      Port		      "1"
+	      OutputWhenDisabled      "held"
+	      InitialOutput	      "[]"
+	    }
+	    Line {
+	      SrcBlock		      "State\nSpace"
+	      SrcPort		      1
+	      DstBlock		      "Out1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      DstBlock		      "State\nSpace"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "Matrix Gain R"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [340, 130, 370, 160]
+	  ShowPortLabels	  on
+	  MaskType		  "Matrix Gain"
+	  MaskDescription	  "Matrix Gain."
+	  MaskHelp		  "Multiplies input vector by entered matrix t"
+"o produce output vector (y=Au)."
+	  MaskPromptString	  "Gain matrix:"
+	  MaskStyleString	  "edit"
+	  MaskTunableValueString  "on"
+	  MaskEnableString	  "on"
+	  MaskVisibilityString	  "on"
+	  MaskVariables		  "K=@1;"
+	  MaskDisplay		  "disp('R')"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "R"
+	  System {
+	    Name		    "Matrix Gain R"
+	    Location		    [162, 233, 402, 326]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "usletter"
+	    PaperUnits		    "inches"
+	    ZoomFactor		    "100"
+	    AutoZoom		    on
+	    Block {
+	      BlockType		      Inport
+	      Name		      "In1"
+	      Position		      [25, 33, 55, 47]
+	      Port		      "1"
+	      PortWidth		      "-1"
+	      SampleTime	      "-1"
+	      DataType		      "auto"
+	      SignalType	      "auto"
+	      Interpolate	      on
+	    }
+	    Block {
+	      BlockType		      StateSpace
+	      Name		      "State\nSpace"
+	      Position		      [80, 23, 145, 57]
+	      ShowName		      off
+	      A			      "[]"
+	      B			      "[]"
+	      C			      "[]"
+	      D			      "K"
+	      X0		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "Out1"
+	      Position		      [170, 33, 200, 47]
+	      Port		      "1"
+	      OutputWhenDisabled      "held"
+	      InitialOutput	      "[]"
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      DstBlock		      "State\nSpace"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "State\nSpace"
+	      SrcPort		      1
+	      DstBlock		      "Out1"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  Product
+	  Name			  "Product"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [275, 119, 300, 166]
+	  ShowName		  off
+	  Inputs		  "2"
+	  SaturateOnIntegerOverflow on
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [130, 145, 150, 165]
+	  ShowName		  off
+	  IconShape		  "round"
+	  Inputs		  "-+|"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "x"
+	  Position		  [490, 138, 520, 152]
+	  Port			  "1"
+	  OutputWhenDisabled	  "held"
+	  InitialOutput		  "[]"
+	}
+	Line {
+	  SrcBlock		  "Matrix Gain R"
+	  SrcPort		  1
+	  DstBlock		  "Integrator"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Product"
+	  SrcPort		  1
+	  DstBlock		  "Matrix Gain R"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Integrator"
+	  SrcPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    Points		    [0, -60; -215, 0]
+	    Branch {
+	      DstBlock		      "Matrix Gain A"
+	      DstPort		      1
+	    }
+	    Branch {
+	      Points		      [0, 45]
+	      DstBlock		      "Product"
+	      DstPort		      1
+	    }
+	  }
+	  Branch {
+	    DstBlock		    "x"
+	    DstPort		    1
+	  }
+	}
+	Line {
+	  SrcBlock		  "Sum"
+	  SrcPort		  1
+	  DstBlock		  "Product"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Matrix Gain A"
+	  SrcPort		  1
+	  Points		  [-30, 0]
+	  DstBlock		  "Sum"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Constant"
+	  SrcPort		  1
+	  DstBlock		  "Sum"
+	  DstPort		  2
+	}
+	Annotation {
+	  Position		  [412, 32]
+	  Text			  "xdot =  Rx .* ( 1 - Ax) "
+	}
+	Annotation {
+	  Position		  [122, 32]
+	  Text			  "Competitive Lotka-Volterra Model System"
+	}
+      }
+    }
+    Block {
+      BlockType		      SubSystem
+      Name		      "clv3"
+      Ports		      [0, 1, 0, 0, 0]
+      Position		      [70, 221, 110, 279]
+      ShowPortLabels	      on
+      MaskType		      "Competitive Lotka Volterra System"
+      MaskDescription	      " This autonomous system represents the competit"
+"ive lotka volterra system\n xdot =  Rx .* ( 1 - Ax)\n where each component of"
+" x represents a population, \n A is an interaction matrix, and R is a diagona"
+"l \"growth rate\" matrix.\n Parameters and initial state can be selected from"
+" the mask.\n"
+      MaskHelp		      " This autonomous system represents the competit"
+"ive lotka volterra system\n <p>\n The system equations are: \n xdot =  Rx .* "
+"( 1 - Ax)\n where each component of x represents a population, \n A is an int"
+"eraction matrix, and R is a diagonal \"growth rate\" matrix.\n Parameters and"
+" initial state can be selected from the mask.\n"
+      MaskPromptString	      "A|R|Initial Condition"
+      MaskStyleString	      "edit,edit,edit"
+      MaskTunableValueString  "on,on,on"
+      MaskCallbackString      "||"
+      MaskEnableString	      "on,on,on"
+      MaskVisibilityString    "on,on,on"
+      MaskVariables	      "A=@1;R=@2;x0=@3;"
+      MaskIconFrame	      on
+      MaskIconOpaque	      on
+      MaskIconRotate	      "none"
+      MaskIconUnits	      "autoscale"
+      MaskValueString	      "[1 1.09 1.52 0; 0 1 0.44 1.36; 2.33 0 1 1.47; 1"
+".21 0.51 0.35 1]|diag([1 0.72 1.53 1.27])|[0.2 0.2 0.2 0.3]"
+      System {
+	Name			"clv3"
+	Location		[444, 276, 995, 491]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	ZoomFactor		"100"
+	AutoZoom		on
+	Block {
+	  BlockType		  Constant
+	  Name			  "Constant"
+	  Position		  [15, 144, 105, 166]
+	  Value			  "ones(size(A,2),1)"
+	}
+	Block {
+	  BlockType		  Integrator
+	  Name			  "Integrator"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [410, 134, 440, 156]
+	  ExternalReset		  "none"
+	  InitialConditionSource  "internal"
+	  InitialCondition	  "x0"
+	  LimitOutput		  off
+	  UpperSaturationLimit	  "inf"
+	  LowerSaturationLimit	  "-inf"
+	  ShowSaturationPort	  off
+	  ShowStatePort		  off
+	  AbsoluteTolerance	  "auto"
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "Matrix Gain A"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [175, 70, 205, 100]
+	  Orientation		  "left"
+	  ShowPortLabels	  on
+	  MaskType		  "Matrix Gain"
+	  MaskDescription	  "Matrix Gain."
+	  MaskHelp		  "Multiplies input vector by entered matrix t"
+"o produce output vector (y=Au)."
+	  MaskPromptString	  "Gain matrix:"
+	  MaskStyleString	  "edit"
+	  MaskTunableValueString  "on"
+	  MaskEnableString	  "on"
+	  MaskVisibilityString	  "on"
+	  MaskVariables		  "K=@1;"
+	  MaskDisplay		  "disp('A')"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "A"
+	  System {
+	    Name		    "Matrix Gain A"
+	    Location		    [162, 233, 402, 326]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "usletter"
+	    PaperUnits		    "inches"
+	    ZoomFactor		    "100"
+	    AutoZoom		    on
+	    Block {
+	      BlockType		      Inport
+	      Name		      "In1"
+	      Position		      [25, 33, 55, 47]
+	      Port		      "1"
+	      PortWidth		      "-1"
+	      SampleTime	      "-1"
+	      DataType		      "auto"
+	      SignalType	      "auto"
+	      Interpolate	      on
+	    }
+	    Block {
+	      BlockType		      StateSpace
+	      Name		      "State\nSpace"
+	      Position		      [80, 23, 145, 57]
+	      ShowName		      off
+	      A			      "[]"
+	      B			      "[]"
+	      C			      "[]"
+	      D			      "K"
+	      X0		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "Out1"
+	      Position		      [170, 33, 200, 47]
+	      Port		      "1"
+	      OutputWhenDisabled      "held"
+	      InitialOutput	      "[]"
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      DstBlock		      "State\nSpace"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "State\nSpace"
+	      SrcPort		      1
+	      DstBlock		      "Out1"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  SubSystem
+	  Name			  "Matrix Gain R"
+	  Ports			  [1, 1, 0, 0, 0]
+	  Position		  [340, 130, 370, 160]
+	  ShowPortLabels	  on
+	  MaskType		  "Matrix Gain"
+	  MaskDescription	  "Matrix Gain."
+	  MaskHelp		  "Multiplies input vector by entered matrix t"
+"o produce output vector (y=Au)."
+	  MaskPromptString	  "Gain matrix:"
+	  MaskStyleString	  "edit"
+	  MaskTunableValueString  "on"
+	  MaskEnableString	  "on"
+	  MaskVisibilityString	  "on"
+	  MaskVariables		  "K=@1;"
+	  MaskDisplay		  "disp('R')"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskIconUnits		  "autoscale"
+	  MaskValueString	  "R"
+	  System {
+	    Name		    "Matrix Gain R"
+	    Location		    [162, 233, 402, 326]
+	    Open		    off
+	    ModelBrowserVisibility  off
+	    ModelBrowserWidth	    200
+	    ScreenColor		    "white"
+	    PaperOrientation	    "landscape"
+	    PaperPositionMode	    "auto"
+	    PaperType		    "usletter"
+	    PaperUnits		    "inches"
+	    ZoomFactor		    "100"
+	    AutoZoom		    on
+	    Block {
+	      BlockType		      Inport
+	      Name		      "In1"
+	      Position		      [25, 33, 55, 47]
+	      Port		      "1"
+	      PortWidth		      "-1"
+	      SampleTime	      "-1"
+	      DataType		      "auto"
+	      SignalType	      "auto"
+	      Interpolate	      on
+	    }
+	    Block {
+	      BlockType		      StateSpace
+	      Name		      "State\nSpace"
+	      Position		      [80, 23, 145, 57]
+	      ShowName		      off
+	      A			      "[]"
+	      B			      "[]"
+	      C			      "[]"
+	      D			      "K"
+	      X0		      "0"
+	    }
+	    Block {
+	      BlockType		      Outport
+	      Name		      "Out1"
+	      Position		      [170, 33, 200, 47]
+	      Port		      "1"
+	      OutputWhenDisabled      "held"
+	      InitialOutput	      "[]"
+	    }
+	    Line {
+	      SrcBlock		      "State\nSpace"
+	      SrcPort		      1
+	      DstBlock		      "Out1"
+	      DstPort		      1
+	    }
+	    Line {
+	      SrcBlock		      "In1"
+	      SrcPort		      1
+	      DstBlock		      "State\nSpace"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Block {
+	  BlockType		  Product
+	  Name			  "Product"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [275, 119, 300, 166]
+	  ShowName		  off
+	  Inputs		  "2"
+	  SaturateOnIntegerOverflow on
+	}
+	Block {
+	  BlockType		  Sum
+	  Name			  "Sum"
+	  Ports			  [2, 1, 0, 0, 0]
+	  Position		  [130, 145, 150, 165]
+	  ShowName		  off
+	  IconShape		  "round"
+	  Inputs		  "-+|"
+	  SaturateOnIntegerOverflow off
+	}
+	Block {
+	  BlockType		  Outport
+	  Name			  "x"
+	  Position		  [490, 138, 520, 152]
+	  Port			  "1"
+	  OutputWhenDisabled	  "held"
+	  InitialOutput		  "[]"
+	}
+	Line {
+	  SrcBlock		  "Constant"
+	  SrcPort		  1
+	  DstBlock		  "Sum"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Matrix Gain A"
+	  SrcPort		  1
+	  Points		  [-30, 0]
+	  DstBlock		  "Sum"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Sum"
+	  SrcPort		  1
+	  DstBlock		  "Product"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Integrator"
+	  SrcPort		  1
+	  Points		  [15, 0]
+	  Branch {
+	    DstBlock		    "x"
+	    DstPort		    1
+	  }
+	  Branch {
+	    Points		    [0, -60; -215, 0]
+	    Branch {
+	      Points		      [0, 45]
+	      DstBlock		      "Product"
+	      DstPort		      1
+	    }
+	    Branch {
+	      DstBlock		      "Matrix Gain A"
+	      DstPort		      1
+	    }
+	  }
+	}
+	Line {
+	  SrcBlock		  "Product"
+	  SrcPort		  1
+	  DstBlock		  "Matrix Gain R"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Matrix Gain R"
+	  SrcPort		  1
+	  DstBlock		  "Integrator"
+	  DstPort		  1
+	}
+	Annotation {
+	  Position		  [122, 32]
+	  Text			  "Competitive Lotka-Volterra Model System"
+	}
+	Annotation {
+	  Position		  [412, 32]
+	  Text			  "xdot =  Rx .* ( 1 - Ax) "
+	}
+      }
+    }
+    Line {
+      SrcBlock		      "Mux"
+      SrcPort		      1
+      Points		      [20, 0]
+      Branch {
+	DstBlock		"Selector1"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -35]
+	DstBlock		"Selector"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 35]
+	Branch {
+	  Points		  [0, 70]
+	  DstBlock		  "Scope"
+	  DstPort		  1
+	}
+	Branch {
+	  DstBlock		  "Selector2"
+	  DstPort		  1
+	}
+      }
+    }
+    Line {
+      Name		      "p1p2p3"
+      Labels		      [0, 0]
+      SrcBlock		      "Selector"
+      SrcPort		      1
+      DstBlock		      "XYZ Graph"
+      DstPort		      1
+    }
+    Line {
+      Name		      "p1p2p3"
+      Labels		      [0, 0]
+      SrcBlock		      "Selector1"
+      SrcPort		      1
+      DstBlock		      "XYZ Graph"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "clv1"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "clv2"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "clv3"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      3
+    }
+    Line {
+      Name		      "p1p2p3"
+      Labels		      [0, 0]
+      SrcBlock		      "Selector2"
+      SrcPort		      1
+      DstBlock		      "XYZ Graph"
+      DstPort		      3
+    }
+    Annotation {
+      Position		      [39, 335]
+      HorizontalAlignment     "left"
+      Text		      "Example taken from:"
+    }
+    Annotation {
+      Position		      [224, 350]
+      Text		      "http://en.wikipedia.org/wiki/Lotka-Volterra_int"
+"er-specific_competition_equations"
+    }
+  }
+}

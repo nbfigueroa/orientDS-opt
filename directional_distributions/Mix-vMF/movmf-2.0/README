@@ -1,0 +1,18 @@
+% File: README
+% This is the README file for the mixture of von Mises-Fisher (movmf) based
+% clustering algorithm that we have implemented.
+
+% To compile this code the following prerequisites must be met:
+
+1. GCC (g++) version >= 3.4
+2. The NTL Library (Number theory library)
+
+
+Compiling the code:
+
+1. Untar the archive
+2. cd movmf/
+3. Edit the 'makefile' to point to the path containing NTL
+4. make
+
+
