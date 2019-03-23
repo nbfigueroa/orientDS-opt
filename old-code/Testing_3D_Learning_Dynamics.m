@@ -1,7 +1,5 @@
 %% Testing EE Dynamics Learning Algorithms
-clear all
-close all
-clc
+clear all; close all; clc
 %% Load Example 3D data set (positions/axis-angle)
 load('example_3d.mat')
 change_ori = 1;
@@ -627,8 +625,8 @@ o = x_r(:,1:100);
 q = zeros (4,length(o));
 for kk=1:size(o,2), 
     angle = norm(o(:,jj));
-    axis = o(:,j)*angle;   
-    q(:,kk) = AxisAngle2Quat(axis,angle);
+    axis_ = o(:,j)*angle;   
+    q(:,kk) = AxisAngle2Quat(axis_,angle);
 end
 
 % Convert to Homogeneous MatriX Representation
