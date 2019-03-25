@@ -57,7 +57,6 @@ end
 sub_sample = 5;
 [Data, Data_sh, att, x0_all, dt, data, Hdata] = processDataStructureOrient(data, Hdata, sub_sample);
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Visualize 2D reference trajectories %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,3 +101,24 @@ ori_samples = 300; frame_size = 0.25; box_size = [0.45 0.15 0.05];
 plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size); 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   Playing around with quaternions   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure('Color',[1 1 1])
+for i=1:length(qdata)   
+    qData_ = qdata{i};
+    qdata_shift = zeros(4,length(qData_ ));
+    qdata_shift(1,:)   = qData_(4,:);
+    qdata_shift(2:4,:) = qData_(1:3,:);
+    plot(1:length(qdata_shift),qdata_shift(1,:),'r-.','LineWidth',2); hold on;
+    plot(1:length(qdata_shift),qdata_shift(2,:),'g-.','LineWidth',2); hold on;
+    plot(1:length(qdata_shift),qdata_shift(3,:),'b-.','LineWidth',2); hold on;
+    plot(1:length(qdata_shift),qdata_shift(4,:),'m-.','LineWidth',2); hold on;
+    legend({'$q_1$','$q_2$','$q_3$','$q_4$'},'Interpreter','LaTex', 'FontSize',14)
+    xlabel('Time-stamp','Interpreter','LaTex', 'FontSize',14);
+    ylabel('Quaternion','Interpreter','LaTex', 'FontSize',14);    
+    grid on;
+    axis tight;
+end
+title_name =strcat('Demonstration',{' '},num2str(demo_id));
+title('Demonstrations from Gazebo','Interpreter','LaTex', 'FontSize',14);

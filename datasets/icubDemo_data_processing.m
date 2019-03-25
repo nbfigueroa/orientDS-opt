@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear all; clc; close all
 
-% Load Data from Michael's Demonstrations
+%% Load Data from Michael's Demonstrations
 load('rawdata_icubwMichael')
 
 % Trajectories to use
@@ -13,6 +13,7 @@ raw_data(2) = [];
 data = []; 
 odata = [];
 window_size = 1051; crop_size = (window_size+1)/2; 
+window_size_q = 251; crop_size_q = (window_size_q+1)/2; 
 dt = raw_data{1}.dt;
 pre_subsample = 3;
 pos_cutting = 1e-3;
@@ -23,6 +24,11 @@ for i=1:length(raw_data)
         X     = dx_nth(:,:,1)';
         X_dot = dx_nth(:,:,2)';    
         q     = ee_pose(4:end-1,crop_size:end-crop_size);
+        
+        dq_nth = sgolay_time_derivatives(q', dt, 2, 2, window_size_q);
+        q     = dq_nth(:,:,1)';
+        X     = X(:,crop_size_q:end-crop_size_q);
+        X_dot = X_dot(:,crop_size_q:end-crop_size_q);        
         
         % Trim data with zero-velocity
         zero_vel_idx = [];
@@ -49,10 +55,16 @@ for i=1:length(raw_data)
             X_dot(:,end-k) = (X_dot(:,end-k) +  X_dot(:,end-(k-1)))/2;
         end
                
-        data{i} = [X(:,1:pre_subsample:end); X_dot(:,1:pre_subsample:end)];                
+        data{i} = [X(:,1:pre_subsample:end); X_dot(:,1:pre_subsample:end)];                                
         
         % Make x-axis of rotation the heading of the robot
         q_tmp = q(:,1:pre_subsample:end);
+        
+        % Fix quaternion for 2nd demonstration
+        if i==2
+            q_tmp(:,3880:4028) = repmat(q_tmp(:,3880),[1 length(3880:4028)]);
+        end
+        
         R_tmp = quaternion(q_tmp,1);
 
         % Populate H matrix
@@ -67,7 +79,7 @@ for i=1:length(raw_data)
         Rdata{i} = R;
         Hdata{i} = H;
         q = quaternion(R,1);
-        qdata{i} = R;
+        qdata{i} = q;
         
 end
 
@@ -98,6 +110,31 @@ plotminbox(cornerpoints,[0.5 0.5 0.5]); hold on;
 
 
 %%%%% Plot 6DoF trajectories %%%%%
-ori_samples = 200; frame_size = 0.25; box_size = [0.15 0.1 0.05];
+ori_samples = 150; frame_size = 0.25; box_size = [0.15 0.1 0.05];
 plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size); 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   Playing around with quaternions   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+figure('Color',[1 1 1])
+% for i=1:length(qdata)   
+for i=2:2
+    qData_ = qdata{i};
+    [qData_] = checkRotations(qData_)
+    qdata_shift = zeros(4,length(qData_ ));
+    qdata_shift(1,:)   = qData_(4,:);
+    qdata_shift(2:4,:) = qData_(1:3,:);
+    plot(1:length(qdata_shift),qdata_shift(1,:),'r-.','LineWidth',2); hold on;
+    plot(1:length(qdata_shift),qdata_shift(2,:),'g-.','LineWidth',2); hold on;
+    plot(1:length(qdata_shift),qdata_shift(3,:),'b-.','LineWidth',2); hold on;
+    plot(1:length(qdata_shift),qdata_shift(4,:),'m-.','LineWidth',2); hold on;
+    legend({'$q_1$','$q_2$','$q_3$','$q_4$'},'Interpreter','LaTex', 'FontSize',14)
+    xlabel('Time-stamp','Interpreter','LaTex', 'FontSize',14);
+    ylabel('Quaternion','Interpreter','LaTex', 'FontSize',14);    
+    grid on;
+    axis tight;
+end
+% title_name =strcat('Demonstration',{' '},num2str(demo_id));
+title('Demonstrations from Gazebo','Interpreter','LaTex', 'FontSize',14);
 
