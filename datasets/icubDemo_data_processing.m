@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clear all; clc; close all
 
-%% Load Data from Michael's Demonstrations
+% Load Data from Michael's Demonstrations
 load('rawdata_icubwMichael')
 
 % Trajectories to use
@@ -23,7 +23,7 @@ for i=1:length(raw_data)
         dx_nth = sgolay_time_derivatives(ee_pose(1:3,:)', dt, 2, 2, window_size);
         X     = dx_nth(:,:,1)';
         X_dot = dx_nth(:,:,2)';    
-        q     = ee_pose(4:end-1,crop_size:end-crop_size);
+        q     = ee_pose(4:end-1,crop_size:end-crop_size);       
         
         dq_nth = sgolay_time_derivatives(q', dt, 2, 2, window_size_q);
         q     = dq_nth(:,:,1)';
@@ -58,11 +58,17 @@ for i=1:length(raw_data)
         data{i} = [X(:,1:pre_subsample:end); X_dot(:,1:pre_subsample:end)];                                
         
         % Make x-axis of rotation the heading of the robot
-        q_tmp = q(:,1:pre_subsample:end);
+        q_tmp = q(:,1:pre_subsample:end);        
         
         % Fix quaternion for 2nd demonstration
         if i==2
+            q_tmp(:,2101:2514) = repmat(q_tmp(:,2101),[1 length(2101:2514)]);
             q_tmp(:,3880:4028) = repmat(q_tmp(:,3880),[1 length(3880:4028)]);
+            
+            % Smooth out some discontinuities in the measurements
+            for k=1:4
+                q_tmp(k,1847:2822) = smooth(q_tmp(k,1847:2822),'loess');
+            end                     
         end
         
         R_tmp = quaternion(q_tmp,1);
@@ -70,7 +76,7 @@ for i=1:length(raw_data)
         % Populate H matrix
         H = zeros(4,4,size(R_tmp,3));
         for r=1:length(R_tmp)       
-            R(:,:,r) =  R_tmp(:,:,r)*rotationMatrx('z',deg2rad(90));            
+            R(:,:,r)     = R_tmp(:,:,r)*rotationMatrx('z',deg2rad(90));            
             H(:,:,r)     = eye(4);
             H(1:3,1:3,r) = R(:,:,r);
             H(1:3,4,r)   = data{i}(1:3,r) ;            
@@ -87,7 +93,7 @@ end
 %%     Sub-sample measurements and Process for Learning      %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sub_sample = 5;
-[Data, Data_sh, att, x0_all, dt, data, Hdata] = processDataStructureOrient(data, Hdata, sub_sample);
+[Data, Data_sh, att, x0_all, ~, data, Hdata] = processDataStructureOrient(data, Hdata, sub_sample);
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%       Visualize 6DoF data in 3d       %%
@@ -110,31 +116,101 @@ plotminbox(cornerpoints,[0.5 0.5 0.5]); hold on;
 
 
 %%%%% Plot 6DoF trajectories %%%%%
-ori_samples = 150; frame_size = 0.25; box_size = [0.15 0.1 0.05];
+ori_samples = 200; frame_size = 0.25; box_size = [0.15 0.1 0.05];
 plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size); 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%   Playing around with quaternions   %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plot Quaternions
 figure('Color',[1 1 1])
-% for i=1:length(qdata)   
-for i=2:2
-    qData_ = qdata{i};
-    [qData_] = checkRotations(qData_)
-    qdata_shift = zeros(4,length(qData_ ));
-    qdata_shift(1,:)   = qData_(4,:);
-    qdata_shift(2:4,:) = qData_(1:3,:);
-    plot(1:length(qdata_shift),qdata_shift(1,:),'r-.','LineWidth',2); hold on;
-    plot(1:length(qdata_shift),qdata_shift(2,:),'g-.','LineWidth',2); hold on;
-    plot(1:length(qdata_shift),qdata_shift(3,:),'b-.','LineWidth',2); hold on;
-    plot(1:length(qdata_shift),qdata_shift(4,:),'m-.','LineWidth',2); hold on;
+for i=1:length(qdata)  
+% for i=2:2
+    qData = qdata{i};
+    plot(1:length(qData),qData(1,:),'r-.','LineWidth',2); hold on;
+    plot(1:length(qData),qData(2,:),'g-.','LineWidth',2); hold on;
+    plot(1:length(qData),qData(3,:),'b-.','LineWidth',2); hold on;
+    plot(1:length(qData),qData(4,:),'m-.','LineWidth',2); hold on;
     legend({'$q_1$','$q_2$','$q_3$','$q_4$'},'Interpreter','LaTex', 'FontSize',14)
     xlabel('Time-stamp','Interpreter','LaTex', 'FontSize',14);
-    ylabel('Quaternion','Interpreter','LaTex', 'FontSize',14);    
+    ylabel('Reference Quaternions','Interpreter','LaTex', 'FontSize',14);    
     grid on;
     axis tight;
 end
-% title_name =strcat('Demonstration',{' '},num2str(demo_id));
-title('Demonstrations from Gazebo','Interpreter','LaTex', 'FontSize',14);
+title('Demonstrations from Real iCub Co-Manipulation','Interpreter','LaTex', 'FontSize',14);
 
+
+%% Compute Omega from qdata
+Odata = [];
+for i=1:length(qdata)   
+    qData = qdata{i}; 
+    RData = Rdata{i};
+    Omega = zeros(3,length(qData));
+    for ii=2:length(qData)
+        if true
+            q_2 = quat_conj(qData(:,ii-1));
+            q_1 = qData(:,ii);
+            
+            % Partitioned product
+            % delta_q = quat_prod(q_1,q_2);            
+            % Matrix product option 1
+            % Q = QuatMatrix(q_1);
+            % delta_q = Q*q_2;
+            
+            % Matrix product option 2
+            delta_q = quat_multiply(q_1',q_2');            
+            Omega(:,ii) = 2*quat_logarithm(delta_q)/dt;
+        else
+            % Using Rotation matrices
+            R_2 = RData(:,:,ii-1);
+            R_1 = RData(:,:,ii);
+            Omega(:,ii) = rot_logarithm(R_1*R_2');
+        end
+    end                
+    Odata{i} = Omega;
+end
+
+% Plot Angular Velocities
+figure('Color',[1 1 1])
+% for i=1:length(Odata)   
+for i=1:1
+    Omega = Odata{i};            
+    plot(1:length(Omega),Omega(1,:),'r-.','LineWidth',2); hold on;
+    plot(1:length(Omega),Omega(2,:),'g-.','LineWidth',2); hold on;
+    plot(1:length(Omega),Omega(3,:),'b-.','LineWidth',2); hold on;
+    legend({'$\omega_1$','$\omega_2$','$\omega_3$'},'Interpreter','LaTex', 'FontSize',14)
+    xlabel('Time-stamp','Interpreter','LaTex', 'FontSize',14);
+    ylabel('Angular Velocity (rad/s)','Interpreter','LaTex', 'FontSize',14);    
+    grid on;
+    axis tight;
+end
+title('Demonstrations from Real iCub Co-Manipulation','Interpreter','LaTex', 'FontSize',14);
+
+
+%% Plot Integrated Quaternions
+figure('Color',[1 1 1])
+for i=1:length(Odata)   
+    Omega = Odata{i};
+    qData = qdata{i};
+    qData_hat = zeros(4,length(Omega));    
+    
+    % Forward integration
+    qData_hat(:,1) = qData(:,1); 
+    for ii=2:length(qData_hat)
+        omega_exp = quat_exponential(Omega(:,ii), dt);
+        qData_hat(:,ii) = real(quat_multiply(omega_exp',qData_hat(:,ii-1)'));
+    end
+    
+    % Plot Forward integrated quaternions
+    plot(1:length(qData_hat),qData_hat(1,:),'r-.','LineWidth',2); hold on;
+    plot(1:length(qData_hat),qData_hat(2,:),'g-.','LineWidth',2); hold on;
+    plot(1:length(qData_hat),qData_hat(3,:),'b-.','LineWidth',2); hold on;
+    plot(1:length(qData_hat),qData_hat(4,:),'m-.','LineWidth',2); hold on;
+    legend({'$\hat{q}_1$','$\hat{q}_2$','$\hat{q}_3$','$\hat{q}_4$'},'Interpreter','LaTex', 'FontSize',14)
+    xlabel('Time-stamp','Interpreter','LaTex', 'FontSize',14);
+    ylabel('Forward Inegrated Quaternion $q(t + \Delta t)$','Interpreter','LaTex', 'FontSize',14);    
+    grid on;
+    axis tight;
+end
+title('Demonstrations from Real iCub Co-Manipulation','Interpreter','LaTex', 'FontSize',14);
