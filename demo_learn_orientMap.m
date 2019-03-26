@@ -49,7 +49,7 @@ h_att = scatter(att(1),att(2), 150, [0 0 0],'d','Linewidth',2); hold on;
 
 %%%%% Plot 6DoF trajectories %%%%%
 ori_samples = 300; frame_size = 0.25; box_size = [0.45 0.15 0.05];
-plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size); 
+plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size, 'r'); 
 
 %%%%% Plot Quaternion trajectories %%%%%
 title_name = 'Quaternion Trajectories from Gazebo Demonstrations ';
@@ -95,7 +95,7 @@ h_quat = visualizeEstimatedQuaternions(Data_QX, qx_gmr);
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%    Step 3: Simulate 6DOF learned motions    %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ==> Assume an lpv-ds model was learned or pre-loaded <== %%
+%% ==> Assume an lpv-ds model was learned,  load it <== %%
 DS_name = 'icub-Object-DS-1';
 matfile = strcat(pkg_dir,'/models/', DS_name,'.mat');
 load(matfile)
@@ -105,36 +105,65 @@ else
     ds_lpv = @(x) lpv_ds(x, ds_gmm, A_k, b_k);
 end
 
-%% % Fill in plotting options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  [Plot 1] Visualize DS with Regressed Orientation on Demonstration Data %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ds_plot_options = [];
-ds_plot_options.sim_traj  = 1;            % To simulate trajectories from x0_all
+ds_plot_options.sim_traj  = 0;            % To simulate trajectories from x0_all
 ds_plot_options.x0_all    = x0_all;       % Intial Points
-ds_plot_options.init_type = 'cube';       % For 3D DS, to initialize streamlines
-                                          % 'ellipsoid' or 'cube'  
-ds_plot_options.nb_points = 30;           % No of streamlines to plot (3D)
-ds_plot_options.plot_vol  = 1;            % Plot volume of initial points (3D)
+ds_plot_options.init_type = 'cube';       
+ds_plot_options.nb_points = 30;           
+ds_plot_options.plot_vol  = 1;            
 ds_plot_options.limits    = limits;
+[hd, hs, hr, x_sim] = visualizeEstimatedDS(Xi_ref, ds_lpv, ds_plot_options);
+rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85]); hold on;
+h_att = scatter(0,3, 150, [0 0 0],'d','Linewidth',2); hold on;
+axis tight;
+
+% Plot 6DOF Frames and object on top of DS ==> Make this a function
+demo_quats = qx_gmr(Data_QX(5:6,:));
+demo_R     = quaternion(demo_quats,1);
+demo_H = zeros(4,4,size(demo_R,3));
+for r=1:length(demo_R)
+    demo_H(:,:,r)     = eye(4);
+    demo_H(1:3,1:3,r) = demo_R(:,:,r);
+    demo_H(1:M,4,r)   = Data_QX(5:6,r)+att;
+end
+demo_Hdata{1} = demo_H; 
+
+%%%%% Plot 6DoF trajectories %%%%%
+ori_samples = 50; frame_size = 0.25; box_size = [0.45 0.15 0.05];
+plot_6DOF_reference_trajectories(demo_Hdata, ori_samples, frame_size, box_size, 'r'); 
+title('Pos. LPV-DS + Coupled Quat. Mapping on Training Data', 'Interpreter','LaTex','FontSize',20)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  [Plot 2] Visualize DS with Regressed Orientation on Forward Simulations  %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+x0_all_new  = [x0_all x0_all-[0.25 1]'];
+limits_new  = limits + [0 1 0 0];
+ds_plot_options.sim_traj  = 1;        
+ds_plot_options.x0_all    = x0_all_new;       
+ds_plot_opionts.limits    = limits_new;
 
 [hd, hs, hr, x_sim] = visualizeEstimatedDS(Xi_ref, ds_lpv, ds_plot_options);
 rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85]); hold on;
 h_att = scatter(0,3, 150, [0 0 0],'d','Linewidth',2); hold on;
-h_orig = scatter(0,0, 150, [0 1 0],'d','Linewidth',2); hold on;
 axis tight;
 
-%% Plot 6DOF Frames and object on top of DS
-demo_quats = qx_gmr(Data_QX(5:6,:));
+% Plot 6DOF Frames and object on top of DS
+x_sim_vect = reshape(x_sim, [2 size(x_sim,2)*size(x_sim,3)]);
+x_sim_vect = x_sim_vect(:,1:10:end);
+demo_quats = qx_gmr(x_sim_vect - att);
+demo_R     = quaternion(demo_quats,0);
+demo_H = zeros(4,4,size(demo_R,3));
+for r=1:length(demo_R)
+    demo_H(:,:,r)     = eye(4);
+    demo_H(1:3,1:3,r) = demo_R(:,:,r);
+    demo_H(1:M,4,r)   = x_sim_vect(:,r);
+end
+demo_Hdata{1} = demo_H; 
 
-
-% 
-% switch constr_type
-%     case 0
-%         title('GMM-based LPV-DS with QLF', 'Interpreter','LaTex','FontSize',20)
-%     case 1
-%         title('GMM-based LPV-DS with P-QLF (v0) ', 'Interpreter','LaTex','FontSize',20)
-%     case 2
-%         title('GMM-based LPV-DS with P-QLF', 'Interpreter','LaTex','FontSize',20)
-% end
-
-
-
-
+%%%%% Plot 6DoF trajectories %%%%%
+ori_samples = 100; frame_size = 0.25; box_size = [0.45 0.15 0.05];
+plot_6DOF_reference_trajectories(demo_Hdata, ori_samples, frame_size, box_size, 'k'); 
+title('Pos. LPV-DS + Coupled Quat. Mapping on Simulations', 'Interpreter','LaTex','FontSize',20)
