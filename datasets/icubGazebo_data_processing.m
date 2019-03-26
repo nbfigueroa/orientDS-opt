@@ -166,7 +166,6 @@ for i=1:1
 end
 title('Demonstrations from Gazebo','Interpreter','LaTex', 'FontSize',14);
 
-
 %% Plot Integrated Quaternions
 figure('Color',[1 1 1])
 for i=1:length(Odata)   
