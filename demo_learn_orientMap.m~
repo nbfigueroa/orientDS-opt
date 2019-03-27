@@ -37,7 +37,7 @@ sub_sample      = 5; % To sub-sample trajectories
 [Data, Data_sh, att, x0_all, ... 
 dt, data, qdata, Hdata, Data_QX] = load_6DOF_datasets(pkg_dir, choosen_dataset, sub_sample);
 
-%%%%% Plot Position/Velocity Trajectories %%%%%
+%%%%% Plot Position/Velocitty Trajectories %%%%%
 vel_samples = 80; vel_size = 0.75; 
 [h_data, h_att, h_vel] = plot_reference_trajectories_DS(Data, att, vel_samples, vel_size);
 axis equal;
@@ -88,8 +88,6 @@ switch quat_gmm_type
        % Generate GMM data structure for Mapping Function
        clear qx_gmm; qx_gmm.Mu = Mu; qx_gmm.Sigma = Sigma; qx_gmm.Priors = Priors;
        qx_gmr          = @(x) gmr_regressor(qx_gmm.Priors, qx_gmm.Mu, qx_gmm.Sigma,x, 5:6, 1:4);
-       
-       % Approach name
        regress_approach = 'standard GMM';
        
     case 1       
@@ -97,8 +95,7 @@ switch quat_gmm_type
        %%%% Setting some variables and Prepare Data %%%%%
        xIn  = Data_QX(5:6,:);
        xOut = Data_QX(1:4,:);
-       M_in = size(xIn,1);
-       N    = size(xIn,2);
+       M_in     = size(xIn,1);
        
        % Position Input, Quaternion Output
        x = [xIn; xOut];
@@ -113,10 +110,16 @@ switch quat_gmm_type
        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        nbIter    = 10; %Number of iteration for the Gauss Newton algorithm
        nbIterEM  = 10; %Number of iteration for the EM algorithm
-       
-       clear model       
-       model.nbVar    = M_in+3; %Dimension of the tangent space (incl. input)
-       model.nbVarMan = M_in+4; %Dimension of the manifold (incl. input)       
+       clear model
+       model.nbStates = 6; %Number of states in the GMM
+       switch M_in
+           case 2
+               model.nbVar    = 5; %Dimension of the tangent space (incl. time)
+               model.nbVarMan = 6; %Dimension of the manifold (incl. time)
+           case 3
+               model.nbVar    = 6; %Dimension of the tangent space (incl. 2D Euclidean)
+               model.nbVarMan = 7; %Dimension of the manifold (incl. 2D Euclidean)
+       end
        model.params_diagRegFact = 1E-4; %Regularization of covariance
        
        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -125,17 +128,15 @@ switch quat_gmm_type
        est_options = [];
        est_options.type             = 1;   % GMM Estimation Alorithm Type
        est_options.maxK             = 20;  % Maximum Gaussians for Type 1
-       est_options.fixed_K          = [];  % Fix K and estimate with EM for Type 1
+       est_options.fixed_K          = model.nbStates;  % Fix K and estimate with EM for Type 1
        est_options.do_plots         = 0;   % Plot Estimation Statistics
        est_options.sub_sample       = 1;   % Size of sub-sampling of trajectories
        [Priors_tang, Mu_tang, Sigma_tang] = fit_gmm(u, [], est_options);
        
        % Populate tangent space GMM model parameters
-       K = length(Priors_tangent);
-       model.nbStates = K; 
-       model.Priors   = Priors_tang;
-       model.Mu       = Mu_tang;
-       model.Sigma    = Sigma_tang;
+       model.Priors = Priors_tang;
+       model.Mu = Mu_tang;
+       model.Sigma = Sigma_tang;
        
        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        % Fit Riemmanian GMM with Gauss-Newton method %
@@ -146,16 +147,23 @@ switch quat_gmm_type
         
        % Generate GMM data structure 
        clear qx_rgmm; qx_rgm = model;
-       in = 1:M_in; out=M_in+1:M_in+3; outMan=M_in+1:M_in+4;
-       qx_gmr  = @(x) rgmr_regressor(model, x, in, out, outMan, U0, nbIter);
+       in = 1:M_in; out
+       switch M_in
+           case 2
+               % 2d- Euclidean Manifold Input
+               in=1:2; out=3:5; outMan=3:6;
+           case 3
+               % 3d- Euclidean Manifold Input
+               in=1:3; out=4:6; outMan=3:7;
+       end
        
-       % Approach name
+       
        regress_approach = 'Riemannian GMM';
 end
 
 %% Compute quat_dist error on training data
 mean_quat_error = mean(quat_error(qx_gmr, Data_QX));
-fprintf('%s with got quat_dist on training set: %d \n', regress_approach, mean_quat_error);
+fprintf('Standard GMR with got quat_dist on training set: %d \n', mean_quat_error);
 
 % Compare Quaternions from Demonstration vs Regressor
 h_quat = visualizeEstimatedQuaternions(Data_QX, qx_gmr, regress_approach);
@@ -213,10 +221,4 @@ demo_Hdata{1} = demo_H;
 %%%%% Plot 6DoF trajectories %%%%%
 ori_samples = 50; frame_size = 0.25; box_size = [0.45 0.15 0.05];
 plot_6DOF_reference_trajectories(demo_Hdata, ori_samples, frame_size, box_size, 'k'); 
-
-switch quat_gmm_type
-   case 0    
-       title('Learned 6DoF Motion (Pos:LPV-DS + Quat:GMR)', 'Interpreter','LaTex','FontSize',20)
-    case 1
-        title('Learned 6DoF Motion (Pos:LPV-DS + Quat:Riem-GMR)', 'Interpreter','LaTex','FontSize',20)
-end
+title('Learned 6DoF Motion (Pos. LPV-DS + Quat-GMR)', 'Interpreter','LaTex','FontSize',20)

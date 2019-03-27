@@ -107,7 +107,7 @@ switch M_in
         in=1:3; out=4:6; outMan=3:7;
 end
 
-% Create regressor function handle
+%% Create regressor function handle
 clear qx_rgmr
 qx_rgmr  = @(x) rgmr_regressor(model, x, in, out, outMan, U0, nbIter);
 
