@@ -1,3 +1,10 @@
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Demo Script for Learning a Riemmanian GMM on Quat+Euclidean Data       %%
+% Author: Nadia Figueroa                                                 %%
+% Disclaimer: This code was adapted from the pbdlib-matlab demo script   %%
+% demo_Riemannian_quat_GMR02.m which implements the algorithm below      %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ==>> Following we copy the intro text from demo_Riemannian_quat_GMR02.m 
 % GMR with time as input and unit quaternion as output by relying on Riemannian manifold. 
 %
 % Writing code takes time. Polishing it and making it available to others takes longer! 
@@ -32,29 +39,16 @@
 % 
 % You should have received a copy of the GNU General Public License
 % along with PbDlib. If not, see <http://www.gnu.org/licenses/>.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Step 1: Generate artificial unit quaternion as output data from handwriting data %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%
+% Choose Demo  %%
+%%%%%%%%%%%%%%%%%
 clear all; close all; clc
 choose_dim = 2;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Set Estimation Parameters   %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-nbIter    = 10; %Number of iteration for the Gauss Newton algorithm
-nbIterEM  = 10; %Number of iteration for the EM algorithm
 
-model.nbStates = 6; %Number of states in the GMM
-switch choose_dim
-    case 1
-        model.nbVar    = 4; %Dimension of the tangent space (incl. time)
-        model.nbVarMan = 5; %Dimension of the manifold (incl. time)
-    case 2
-        model.nbVar    = 5; %Dimension of the tangent space (incl. time)
-        model.nbVarMan = 6; %Dimension of the manifold (incl. time)
-end
-model.dt       = 0.01; %Time step duration
-model.params_diagRegFact = 1E-4; %Regularization of covariance
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Generate artificial unit quaternion as output data from handwriting data %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nbData    = 50; %Number of datapoints
 nbSamples = 4; %Number of demonstrations
 demos=[];
@@ -85,23 +79,42 @@ end
 xIn = uIn;
 xOut = expmap(uOut, [0; 1; 0; 0]);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Initialize GMM Parameters with standard GMM %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Euclidean Input, Riemannian Output  (Quaternion)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Step 2: Initialize Tangent Space-GMM Parameters with standard GMM %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Position Input, Quaternion Output
 x = [xIn; xOut];
 
 % Further parameters and init GMM in tangent space
-N = nbData*nbSamples;
+N = length(x);
 M_in = size(xIn,1);
-
 
 % Tangent Space of Riemmanian Manifold (quat looses a dim, euclidean same)
 uIn = xIn;
 uOut = logmap(xOut,[0;1;0;0]);
 u = [uIn; uOut];
 
-% Estimate initial GMM on tangent space
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set Estimation Parameters   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+nbIter    = 10; %Number of iteration for the Gauss Newton algorithm
+nbIterEM  = 10; %Number of iteration for the EM algorithm
+
+model.nbStates = 6; %Number of states in the GMM
+switch choose_dim
+    case 1
+        model.nbVar    = 4; %Dimension of the tangent space (incl. time)
+        model.nbVarMan = 5; %Dimension of the manifold (incl. time)
+    case 2
+        model.nbVar    = 5; %Dimension of the tangent space (incl. 2D Euclidean)
+        model.nbVarMan = 6; %Dimension of the manifold (incl. 2D Euclidean)
+end
+model.dt       = 0.01; %Time step duration
+model.params_diagRegFact = 1E-4; %Regularization of covariance
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Estimate initial GMM on tangent space %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 est_options = [];
 est_options.type             = 1;   % GMM Estimation Alorithm Type
 est_options.maxK             = 20;  % Maximum Gaussians for Type 1
@@ -110,19 +123,19 @@ est_options.do_plots         = 0;   % Plot Estimation Statistics
 est_options.sub_sample       = 1;   % Size of sub-sampling of trajectories
 [Priors_tang, Mu_tang, Sigma_tang] = fit_gmm(u, [], est_options);
 
-% Populate model parameters
+% Populate tangent space GMM model parameters
 model.Priors = Priors_tang;
 model.Mu = Mu_tang;
 model.Sigma = Sigma_tang;
 
-%%%%%%%%%%%%%%%%%%%%%%%%
-%% Fit Riemannian GMM %%
-%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   Step 3: Fit Riemannian GMM   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [model, U0, uTmp] = fit_rgmm(model, xIn, xOut, M_in, N, nbIter, nbIterEM);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Regress a Riemannian GMM %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Step 4: Regress Quats from Euclidean Space with Riemannian GMM    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 switch choose_dim
     case 1
         % 1d- Euclidean Manifold
@@ -134,9 +147,9 @@ end
 % Regress quaternions from Euclidean input
 [uhat,xhat,expSigma] = rgmr_regressor(model, xIn, in, out, outMan, U0, nbIter);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%        Plot Regression Results on Riemmanian Manifold 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   [Optional] Step 5: Plot Regression Results of Riemmanian Manifold    %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clrmap = lines(model.nbStates);
 %Timeline plot
 figure('PaperPosition',[0 0 6 8],'position',[10,10,650,650],'name','Timeline data','Color',[1 1 1]); 

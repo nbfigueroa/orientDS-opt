@@ -1,4 +1,4 @@
-function [uhat, xhat, expSigma] = rgmr_regressor(model, xIn, in, out, outMan, U0, nbIter)
+function [xhat, uhat, expSigma] = rgmr_regressor(model, xIn, in, out, outMan, U0, nbIter)
 
 M_in   = size(xIn,1);
 nbData = size(xIn,2);

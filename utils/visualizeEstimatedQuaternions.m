@@ -3,7 +3,7 @@ h = figure('Color',[1 1 1]);
 qdata_hat = quat_regr(Data_QX(5:6,:));    
 
 % Reference Quaternion Trajectories
-plot(Data_QX(1,:)', '.-','Color',[1 0 1], 'LineWidth',1); hold on;
+plot(Data_QX(1,:)', '.-','Color',[1 0 0], 'LineWidth',1); hold on;
 plot(Data_QX(2,:)', '.-','Color',[0 1 0], 'LineWidth',1); hold on;
 plot(Data_QX(3,:)', '.-','Color',[0 0 1], 'LineWidth',1); hold on;
 plot(Data_QX(4,:)', '.-','Color',[1 0 1], 'LineWidth',1); hold on;
