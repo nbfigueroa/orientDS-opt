@@ -1,2 +1,2 @@
 ## orientDS-opt
-Sandbox for implementation of new formulation for learning orientation dynamical systems.
+Code for learning and generating state-dependent orientation dynamics.
