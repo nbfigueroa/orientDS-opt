@@ -1,9 +1,14 @@
-function [Data, Data_sh, att, x0_all, dt, data, qdata, Hdata, Data_QX] = load_6DOF_datasets(pkg_dir, choosen_dataset, sub_sample)
+function [Data, Data_sh, att, x0_all, dt, data, qdata, Hdata, Data_QX, dataset_name, box_size] = load_6DOF_datasets(pkg_dir, choosen_dataset, sub_sample)
 
 switch  choosen_dataset
     case 1             
              load(strcat(pkg_dir,'datasets/procdata_icubGazebo_right'))
-    case 2
+             dataset_name = 'Gazebo Demonstrations';
+             box_size = [0.45 0.15 0.05];
+    case 2        
+            load(strcat(pkg_dir,'datasets/procdata_icubwMichael'))
+            dataset_name = 'Real Demonstrations w/Mike';
+            box_size = [0.15 0.1 0.05];
 end
 
 % Process and sub-sample trajectories... might need to add qdata

@@ -30,35 +30,41 @@
 clear all; clc; close all;
 pkg_dir         = '/home/nbfigueroa/Dropbox/PhD_papers/CoRL-2018-Extension/code/orientDS-opt/';
 %%%%%%%%%%%%%%%%%%% Choose a Dataset %%%%%%%%%%%%%%%%%%%%%                     
-choosen_dataset = 1; % 1: Demos from Gazebo Simulations
+choosen_dataset = 2; % 1: Demos from Gazebo Simulations
                      % 2: Demos from Real iCub 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sub_sample      = 5; % To sub-sample trajectories                   
-[Data, Data_sh, att, x0_all, ... 
-dt, data, qdata, Hdata, Data_QX] = load_6DOF_datasets(pkg_dir, choosen_dataset, sub_sample);
+[Data, Data_sh, att, x0_all, dt, data, ...
+    qdata, Hdata, Data_QX, dataset_name, box_size] = load_6DOF_datasets(pkg_dir, choosen_dataset, sub_sample);
 
 %%%%% Plot Position/Velocity Trajectories %%%%%
 vel_samples = 80; vel_size = 0.75; 
 [h_data, h_att, h_vel] = plot_reference_trajectories_DS(Data, att, vel_samples, vel_size);
 axis equal;
 limits = axis;
-
-%%%%% Draw Obstacle %%%%%
-rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85]); hold on;
 h_att = scatter(att(1),att(2), 150, [0 0 0],'d','Linewidth',2); hold on;
+switch choosen_dataset
+    case 1
+        %%%%% Draw Obstacle %%%%%
+        rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85]); hold on;
+    case 2
+        %%%%% Draw Table %%%%%
+        rectangle('Position',[-6.75 -2.15 0.5 0.5], 'FaceColor',[.85 .85 .85]); hold on;
+end
 
 %%%%% Plot 6DoF trajectories %%%%%
-ori_samples = 300; frame_size = 0.25; box_size = [0.45 0.15 0.05];
+ori_samples = 300; frame_size = 0.25; 
 plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size, 'r'); 
+title_name = srtcat('6DoF Trajectories from:', dataset_name);
+title(title_name,'LaTex','FontSize',20);
 
 %%%%% Plot Quaternion trajectories %%%%%
-title_name = 'Quaternion Trajectories from Gazebo Demonstrations ';
+title_name = strcat('Quaternion Trajectories from:', dataset_name);
 [h] = plot_Quaternion_trajectories(Data_QX, title_name);
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%    Step 2: Learn Joint Distr. of Quats+Pos as GMM of p(quat,\xi)     %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % Choose type of GMM to learn for p(quat,\xi)
 quat_gmm_type = 1; % 0: Standard (Euclidean) GMM
                    % 1: Riemannian GMM
@@ -111,13 +117,13 @@ switch quat_gmm_type
        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        % Set Estimation Parameters   %%
        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-       nbIter    = 10; %Number of iteration for the Gauss Newton algorithm
-       nbIterEM  = 10; %Number of iteration for the EM algorithm
+       nbIter    = 50;  %Number of iteration for the Gauss Newton algorithm
+       nbIterEM  = 250; %Number of iteration for the EM algorithm
        
-       clear model       
-       model.nbVar    = M_in+3; %Dimension of the tangent space (incl. input)
-       model.nbVarMan = M_in+4; %Dimension of the manifold (incl. input)       
-       model.params_diagRegFact = 1E-4; %Regularization of covariance
+       clear qx_rgmm       
+       qx_rgmm.nbVar    = M_in+3; %Dimension of the tangent space (incl. input)
+       qx_rgmm.nbVarMan = M_in+4; %Dimension of the manifold (incl. input)       
+       qx_rgmm.params_diagRegFact = 1E-4; %Regularization of covariance
        
        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        % Estimate initial GMM on tangent space %
@@ -126,28 +132,27 @@ switch quat_gmm_type
        est_options.type             = 1;   % GMM Estimation Alorithm Type
        est_options.maxK             = 20;  % Maximum Gaussians for Type 1
        est_options.fixed_K          = [];  % Fix K and estimate with EM for Type 1
-       est_options.do_plots         = 0;   % Plot Estimation Statistics
+       est_options.do_plots         = 1;   % Plot Estimation Statistics
        est_options.sub_sample       = 1;   % Size of sub-sampling of trajectories
        [Priors_tang, Mu_tang, Sigma_tang] = fit_gmm(u, [], est_options);
        
        % Populate tangent space GMM model parameters
-       K = length(Priors_tangent);
-       model.nbStates = K; 
-       model.Priors   = Priors_tang;
-       model.Mu       = Mu_tang;
-       model.Sigma    = Sigma_tang;
+       K = length(Priors_tang);
+       qx_rgmm.nbStates = K; 
+       qx_rgmm.Priors   = Priors_tang;
+       qx_rgmm.Mu       = Mu_tang;
+       qx_rgmm.Sigma    = Sigma_tang;
        
        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        % Fit Riemmanian GMM with Gauss-Newton method %
        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
        tic;
-       [model, U0, uTmp] = fit_rgmm(model, xIn, xOut, M_in, N, nbIter, nbIterEM);
+       [qx_rgmm, U0, uTmp] = fit_rgmm(qx_rgmm, xIn, xOut, M_in, N, nbIter, nbIterEM);
        toc;
         
        % Generate GMM data structure 
-       clear qx_rgmm; qx_rgm = model;
        in = 1:M_in; out=M_in+1:M_in+3; outMan=M_in+1:M_in+4;
-       qx_gmr  = @(x) rgmr_regressor(model, x, in, out, outMan, U0, nbIter);
+       qx_gmr  = @(x) rgmr_regressor(qx_rgmm, x, in, out, outMan, U0, nbIter);
        
        % Approach name
        regress_approach = 'Riemannian GMM';
@@ -183,8 +188,9 @@ Xi_dot_ref = Data(M+1:end,:);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% Plot DS Vector Field %%%%%
 ds_plot_options = [];
-x0_all_new  = [x0_all + [0.25 0.25]'  x0_all-[-0.25 0.75]'];
-limits_new  = limits + [0 1.5 0 0];
+x0_all_new  = [x0_all(:,2:3) + [0.25 0.25]'  x0_all-[-0.5 1]'];
+x0_all_new = [x0_all_new [7.28; -0.13]  [6.73;-0.47] [8.99;3.72] [2.58;4.76] [6.55;4.7]];
+limits_new  = limits + [0 2 0 0];
 ds_plot_options.sim_traj  = 1;        
 ds_plot_options.x0_all    = x0_all_new;       
 ds_plot_options.limits    = limits_new;
@@ -192,8 +198,17 @@ ds_plot_options.init_type = 'cube';
 ds_plot_options.nb_points = 30;           
 ds_plot_options.plot_vol  = 1;            
 [hd, hs, hr, x_sim] = visualizeEstimatedDS(Xi_ref, ds_lpv, ds_plot_options);
-rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85]); hold on;
 h_att = scatter(0,3, 150, [0 0 0],'d','Linewidth',2); hold on;
+
+switch choosen_dataset
+    case 1
+        %%%%% Draw Obstacle %%%%%
+        rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85]); hold on;
+    case 2
+        %%%%% Draw Table %%%%%
+        rectangle('Position',[-6.75 -2.15 0.5 0.5], 'FaceColor',[.85 .85 .85]); hold on;
+end
+
 
 %% %%% Plot 6DoF trajectories of Training Data %%%%%
 demo_quats = qx_gmr(Data_QX(5:6,:));

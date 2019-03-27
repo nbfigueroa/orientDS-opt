@@ -8,7 +8,7 @@ load('rawdata_icubwMichael')
 
 % Trajectories to use
 raw_data(1:3) = [];
-raw_data(2) = [];
+raw_data(3) = [];
 
 data = []; 
 odata = [];
@@ -55,20 +55,32 @@ for i=1:length(raw_data)
             X_dot(:,end-k) = (X_dot(:,end-k) +  X_dot(:,end-(k-1)))/2;
         end
                
-        data{i} = [X(:,1:pre_subsample:end); X_dot(:,1:pre_subsample:end)];                                
+        data{i} = [X(1:2,1:pre_subsample:end); X_dot(1:2,1:pre_subsample:end)];                                
         
         % Make x-axis of rotation the heading of the robot
         q_tmp = q(:,1:pre_subsample:end);        
         
-        % Fix quaternion for 2nd demonstration
+        % Remove Measurements from 2nd demo
         if i==2
-            q_tmp(:,2101:2514) = repmat(q_tmp(:,2101),[1 length(2101:2514)]);
-            q_tmp(:,3880:4028) = repmat(q_tmp(:,3880),[1 length(3880:4028)]);
+            xdata = data{i};
+            xdata(:,3250:3788) = [];
+            q_tmp(:,3250:3788) = [];
             
-            % Smooth out some discontinuities in the measurements
-            for k=1:4
-                q_tmp(k,1847:2822) = smooth(q_tmp(k,1847:2822),'loess');
-            end                     
+            
+            dx_nth = sgolay_time_derivatives(xdata(1:2,:)', dt, 2, 2, window_size);
+            X     = dx_nth(:,:,1)';
+            X_dot = dx_nth(:,:,2)';
+            xdata = [X;X_dot];
+            q_tmp = q_tmp(:,crop_size:end-crop_size);                        
+            
+            xdata(:,6599:end) = []; 
+            q_tmp(:,6599:end) = [];            
+            data{i} = xdata;
+        elseif i ==1
+            xdata = data{i};
+            xdata(:,6157:end) = []; 
+            q_tmp(:,6157:end) = [];            
+            data{i} = xdata;
         end
         
         R_tmp = quaternion(q_tmp,1);
@@ -79,7 +91,7 @@ for i=1:length(raw_data)
             R(:,:,r)     = R_tmp(:,:,r)*rotationMatrx('z',deg2rad(90));            
             H(:,:,r)     = eye(4);
             H(1:3,1:3,r) = R(:,:,r);
-            H(1:3,4,r)   = data{i}(1:3,r) ;            
+            H(1:2,4,r)   = data{i}(1:2,r) ;            
         end
         
         Rdata{i} = R;
@@ -103,22 +115,17 @@ M          = size(Data,1)/2;
 Xi_ref     = Data(1:M,:);
 Xi_dot_ref = Data(M+1:end,:); 
 
-
 %%%%% Plot 3D Position/Velocity Trajectories %%%%%
 vel_samples = 50; vel_size = 0.5; 
 [h_data, h_att, h_vel] = plot_reference_trajectories_DS(Data, att, vel_samples, vel_size); 
 hold on;
 
-%%%%%% Plot Wall %%%%%%
-cornerpoints = [-6.35 -1.55 0;  -6.85 -1.55 0;  -6.85 -2.05 0; -6.35 -2.05 0;
-                -6.35 -1.55 0.5;  -6.85 -1.55 0.5;  -6.85 -2.05 0.5; -6.35 -2.05 0.5];            
-plotminbox(cornerpoints,[0.5 0.5 0.5]); hold on;
-
+%%%%% Draw Table %%%%%
+rectangle('Position',[-6.75 -2.15 0.5 0.5], 'FaceColor',[.85 .85 .85]); hold on;
 
 %%%%% Plot 6DoF trajectories %%%%%
 ori_samples = 200; frame_size = 0.25; box_size = [0.15 0.1 0.05];
-plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size); 
-
+plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size, 'r'); 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%   Playing around with quaternions   %%
