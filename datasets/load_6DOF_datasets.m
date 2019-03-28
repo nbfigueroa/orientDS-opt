@@ -3,9 +3,14 @@ function [Data, Data_sh, att, x0_all, dt, data, qdata, Hdata, Data_QX, dataset_n
 switch  choosen_dataset
     case 1             
              load(strcat(pkg_dir,'datasets/procdata_icubGazebo_right'))
-             dataset_name = 'Gazebo Demonstrations';
+             dataset_name = 'Gazebo Demonstrations-1';
              box_size = [0.45 0.15 0.05];
-    case 2        
+             
+    case 2             
+             load(strcat(pkg_dir,'datasets/procdata_icubGazebo_full'))
+             dataset_name = 'Gazebo Demonstrations-2';
+             box_size = [0.45 0.15 0.05];             
+    case 3        
             load(strcat(pkg_dir,'datasets/procdata_icubwMichael'))
             dataset_name = 'Real Demonstrations w/Mike';
             box_size = [0.15 0.1 0.05];

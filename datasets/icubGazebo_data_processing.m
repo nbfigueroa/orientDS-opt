@@ -16,10 +16,20 @@ for i=1:length(raw_data)
         dx_nth = sgolay_time_derivatives(raw_data{i}(2:3,:)', dt, 2, 2, window_size);
         X     = dx_nth(:,:,1)';
         X_dot = dx_nth(:,:,2)';               
-        data{i} = [X; X_dot];
-        
-        % Extract original orientation data
         theta_angles = raw_data{i}(4,crop_size:end-crop_size);
+        
+        if i == 4
+            X(:,1:700) = [];
+            X_dot(:,1:700) = [];
+            theta_angles(:,1:700) = [];
+        elseif i > 4
+            X(:,1:1000) = [];
+            X_dot(:,1:1000) = [];
+            theta_angles(:,1:1000) = [];
+        end
+        
+        
+        data{i} = [X; X_dot];                
         odata{i} = theta_angles;
         
         % Compute rotation data in different forms
@@ -42,7 +52,7 @@ for i=1:length(raw_data)
 end
 
 % Trajectories to use
-left_traj = 0;
+left_traj = 1;
 if ~left_traj
     data(4:end) = [];
     odata(4:end) = [];
@@ -98,7 +108,7 @@ plotminbox(cornerpoints,[0.5 0.5 0.5]); hold on;
 
 %%%%% Plot 6DoF trajectories %%%%%
 ori_samples = 300; frame_size = 0.25; box_size = [0.45 0.15 0.05];
-plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size); 
+plot_6DOF_reference_trajectories(Hdata, ori_samples, frame_size, box_size,'r'); 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

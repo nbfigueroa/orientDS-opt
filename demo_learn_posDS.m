@@ -134,12 +134,19 @@ ds_plot_options.init_type = 'cube';       % For 3D DS, to initialize streamlines
 ds_plot_options.nb_points = 30;           % No of streamlines to plot (3D)
 ds_plot_options.plot_vol  = 1;            % Plot volume of initial points (3D)
 ds_plot_options.limits    = limits;
-
 [hd, hs, hr, x_sim] = visualizeEstimatedDS(Xi_ref, ds_lpv, ds_plot_options);
-rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85]); hold on;
-h_att = scatter(0,3, 150, [0 0 0],'d','Linewidth',2); hold on;
-h_att = scatter(0,0, 150, [0 1 0],'d','Linewidth',2); hold on;
 
+h_att = scatter(att(1),att(2), 150, [0 0 0],'d','Linewidth',2); hold on;
+
+switch choosen_dataset
+    case 1
+    case 2
+        %%%%% Draw Obstacle %%%%%
+        rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85 0.5]); hold on;
+    case 3
+        %%%%% Draw Table %%%%%
+        % rectangle('Position',[-6.75 -2.15 0.5 0.5], 'FaceColor',[.85 .85 .85]); hold on;
+end
 
 switch constr_type
     case 0
@@ -151,15 +158,15 @@ switch constr_type
 end
 axis tight;
 %% %%%%%%%%%%%%   Export DS parameters to Mat/Txt/Yaml files  %%%%%%%%%%%%%%%%%%%
-DS_name = 'icub-Object-DS-1';
+DS_name = 'icub-Object-DS-2';
 save_lpvDS_to_Mat(DS_name, pkg_dir, ds_gmm, A_k, b_k, att, x0_all, dt, P_est, constr_type, est_options)
 
 %% Save LPV-DS parameters to text files
-DS_name = 'icub-Object-DS-1';
+DS_name = 'icub-Object-DS-2';
 save_lpvDS_to_txt(DS_name, pkg_dir,  ds_gmm, A_k, att)
 
 %% Save LPV-DS parameters to yaml file
-DS_name = 'icub-Object-DS-1';
+DS_name = 'icub-Object-DS-2';
 % To use the rest of the code you need a matlab yaml convertor
 % you can get it from here: http://vision.is.tohoku.ac.jp/~kyamagu/software/yaml/
 save_lpvDS_to_Yaml(DS_name, pkg_dir,  ds_gmm, A_k, att, x0_all, dt)
