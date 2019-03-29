@@ -31,7 +31,7 @@ clear all; clc; close all;
 %%
 pkg_dir         = '/home/nbfigueroa/Dropbox/PhD_papers/CoRL-2018-Extension/code/orientDS-opt/';
 %%%%%%%%%%%%%%%%%%% Choose a Dataset %%%%%%%%%%%%%%%%%%%%%                     
-choosen_dataset = 2; % 1: Demos from Gazebo Simulations (right trajectories)
+choosen_dataset = 3; % 1: Demos from Gazebo Simulations (right trajectories)
                      % 2: Demos from Gazebo Simulations (left+right trajectories)
                      % 3: Demos from Real iCub 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,10 +49,10 @@ switch choosen_dataset
     case 1
     case 2
         %%%%% Draw Obstacle %%%%%
-        rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85]); hold on;
+        rectangle('Position',[-1 1 6 1], 'FaceColor',[.85 .85 .85 .5]); hold on;
     case 3
         %%%%% Draw Table %%%%%
-        rectangle('Position',[-6.75 -2.15 0.5 0.5], 'FaceColor',[.85 .85 .85]); hold on;
+        rectangle('Position',[-6.75 -2.15 0.5 0.5], 'FaceColor',[.85 .85 .85 .5]); hold on;
 end
 
 %%%%% Plot 6DoF trajectories %%%%%

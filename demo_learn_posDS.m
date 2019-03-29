@@ -106,9 +106,6 @@ init_cvx    = 0;      % 0/1: initialize non-cvx problem with cvx
 if constr_type == 0 || constr_type == 1
     P_opt = eye(M);
 else
-    % P-matrix learning
-%     [Vxf] = learn_wsaqf(Data,0,att);
-   
     % (Data shifted to the origin)
     % Assuming origin is the attractor (works better generally)
     [Vxf] = learn_wsaqf(Data_sh);
@@ -235,7 +232,8 @@ switch constr_type
         title_string = {'$V(\xi) = (\xi-\xi^*)^TP(\xi-\xi^*)$'};
 end
 
-if M == 2
+% if M == 2
+if N == 2
     % Lyapunov function
     lyap_fun = @(x)lyapunov_function_PQLF(x, att, P);
     
